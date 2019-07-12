@@ -8,6 +8,7 @@
 $pasta_cookies = 'cookies/';
 define('COOKIELOCAL', str_replace('\\', '/', realpath('./')).'/'.$pasta_cookies);
 
+
 // inicia sessão
 @session_start();
 
@@ -21,6 +22,7 @@ function pega_o_que_interessa($inicio,$fim,$total)
 // função para pegar a resposta html da consulta pelo CPF na página da receita
 function getHtmlCNPJ($cnpj, $captcha)
 {
+	
     $cookieFile = COOKIELOCAL.'cnpj_'.session_id();
     if(!file_exists($cookieFile))
     {

@@ -18,7 +18,7 @@ $headers = array(
 	2 => 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 	3 => 'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
 	4 => 'Connection: keep-alive',
-	5 => 'Upgrade-Insecure-Requests: 1'	
+	5 => 'Upgrade-Insecure-Requests: 1'
 );	
 
 // urls para obtenção dos dados
@@ -27,8 +27,10 @@ $url_captcha['cnpj'] = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cn
 $host['cnpj'] = 'Host: www.receita.fazenda.gov.br';
 
 $url['cpf'] = 'http://cpf.receita.fazenda.gov.br/situacao/';
-$url_captcha['cpf'] = 'http://cpf.receita.fazenda.gov.br/situacao/defaultSonoro.asp?CPF=&NASCIMENTO=';
-$host['cpf'] =  'Host: cpf.receita.fazenda.gov.br';
+//https://servicos.receita.fazenda.gov.br/Servicos/CPF/ConsultaSituacao/ConsultaPublicaSonoro.asp
+//http://cpf.receita.fazenda.gov.br/situacao/defaultSonoro.asp?CPF=&NASCIMENTO=
+$url_captcha['cpf'] = 'https://servicos.receita.fazenda.gov.br/Servicos/CPF/ConsultaSituacao/ConsultaPublicaSonoro.asp?CPF=&NASCIMENTO=';
+$host['cpf'] =  'Host: servicos.receita.fazenda.gov.br';//cpf.receita.fazenda.gov.br
 
 // percorre os arrays fazendo as chamadas de CNPJ e CPF: $key é o tipo de chamada
 foreach ($url as $key => $value)
@@ -47,8 +49,10 @@ foreach ($url as $key => $value)
 	}
 	else
 	{
+	
 		// pega os dados de sessão gerados na visualização do captcha dentro do cookie
 		$file = fopen($cookieFile, 'r');
+		$conteudo = '';
 		while (!feof($file))
 		{$conteudo .= fread($file, 1024);}
 		fclose ($file);
@@ -67,14 +71,22 @@ foreach ($url as $key => $value)
 	curl_setopt($ch, CURLOPT_COOKIEJAR, $cookieFile);
 	curl_setopt($ch, CURLOPT_COOKIEFILE, $cookieFile);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FAILONERROR, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+	curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
 	$result = curl_exec($ch);
+
 	curl_close($ch);
 	
 	// trata os resultados da consulta curl
 	if(!empty($result))
 	{
+		
 		// pega os dados de sessão gerados nas primeiras chamadas e que estão dentro do cookie
 		$file = fopen($cookieFile, 'r');
+		$conteudo = '';
 		while (!feof($file))
 		{$conteudo .= fread($file, 1024);}
 		fclose ($file);
@@ -97,9 +109,15 @@ foreach ($url as $key => $value)
 		curl_setopt($ch, CURLOPT_COOKIE, $cookie);			// cookie com os dados da sessão
 		curl_setopt($ch, CURLOPT_REFERER, $value);			// refer = url da chamada anterior
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_FAILONERROR, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
 		$result = curl_exec($ch);
 		curl_close($ch);
 		
+		//print_r($result);
 		// extrai resultados conforme $key
 		if($key == 'cnpj')
 		{$imagem_cnpj = 'data:image/png;base64,'.base64_encode($result);}

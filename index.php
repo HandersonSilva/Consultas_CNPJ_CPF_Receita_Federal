@@ -12,7 +12,9 @@ include("getcaptcha.php");
 <html>
 
 <head>
+<!--<meta http-equiv="Content-type" content="text/html; charset=utf-8" />-->
 <title>CNPJ , CPF e Captcha</title>
+
 </head>
 
 <body>
