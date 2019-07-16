@@ -22,7 +22,7 @@ $headers = array(
 );	
 
 // urls para obtenção dos dados
-$url['cnpj'] = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/Cnpjreva_solicitacao3.asp';
+$url['cnpj'] = 'https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/Cnpjreva_solicitacao3.asp';
 $url_captcha['cnpj'] = 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/captcha/gerarCaptcha.asp';
 $host['cnpj'] = 'Host: www.receita.fazenda.gov.br';
 
