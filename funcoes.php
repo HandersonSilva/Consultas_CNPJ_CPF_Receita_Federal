@@ -32,6 +32,7 @@ function getHtmlCNPJ($cnpj, $captcha)
 	{
 		// pega os dados de sessão gerados na visualização do captcha dentro do cookie
 		$file = fopen($cookieFile, 'r');
+		$conteudo = '';
 		while (!feof($file))
 		{$conteudo .= fread($file, 1024);}
 		fclose ($file);
@@ -87,7 +88,7 @@ function getHtmlCNPJ($cnpj, $captcha)
 	'Upgrade-Insecure-Requests: 1',	
 );
 	
-    $ch = curl_init('http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/valida.asp');
+    $ch = curl_init('https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/valida.asp');
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post);		// aqui estão os campos de formulário
@@ -96,7 +97,7 @@ function getHtmlCNPJ($cnpj, $captcha)
     curl_setopt($ch, CURLOPT_COOKIE, $cookie);	    // dados de sessão e flag=1
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_MAXREDIRS, 3);
-    curl_setopt($ch, CURLOPT_REFERER, 'http://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/Cnpjreva_Solicitacao2.asp');
+    curl_setopt($ch, CURLOPT_REFERER, 'https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/Cnpjreva_Solicitacao2.asp');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $html = curl_exec($ch);
     curl_close($ch);
